@@ -1,0 +1,118 @@
+<!-- Playing Psychic -->
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
+  <title>Psychic Game</title>
+  <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+	<div class="header" align="center">
+		<h1>You Are The Psychic</h1>
+	</div> <!-- end div header -->
+
+	<div class="clearfix">
+		<div class="leftCol" id="scoreBoard" float="left" clear="left">
+			<H2>
+			<p align="center"> SCORE BOARD </p>
+			<p> Wins		: 0</p>
+			<p> Losses		: 0</p>
+			<p> Guesses Left: 9</p>
+			</H2>
+		</div>
+		<div class="rightCol" id="communicationBoard">
+   			<p>I'm thinking of an alphabet</p>
+   		   	<p>Guess what's on my mind!!!</p>
+   			<p>You Have 9 chances to guess my letter and impress me!</p>
+		</div>
+		<div class="userPanel" id="myUserPanel" float="right" align="top" vertical-align="top">
+		</div>
+	</div> <!-- end div clearfix -->
+
+	<div class="footer" align="center">
+		<h4>Jyotsna Kavirayani &copy; 2017-2018</h4>
+	</div> <!-- end div footer -->
+
+  <script>
+
+	// Global Variables
+		var wins 		= 0;
+    	var losses 		= 0;
+    	var guesses 	= 9;
+    	var gameOver 	= 0;
+
+    	var userGuess	= "";
+
+		startGame();
+
+  	function startGame() 
+  	{
+		var computerChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+		var computerGuess = computerChoices[Math.floor(Math.random() * computerChoices.length)];
+	
+   		var staticComm 	= "<p>I'm thinking of an alphabet</p>"+
+   		   			      "<p>Guess what's on my mind!!!</p>";
+   		var dynComm 	= "<p>You Have " + guesses +" chances to impress me!";
+
+   		var scoreCard 	= '<H2> <p align="center"> SCORE BOARD </p>'+
+   						  "<p> Wins		: "+wins+"</p>"+
+						  "<p> Losses		: "+losses+"</p>"+
+						  "<p> Guesses Left: "+guesses+"</p></H2>";
+
+		var userChoices =new Array(0);
+			// refresh screen with current status          
+   			document.querySelector("#communicationBoard").innerHTML = staticComm+dynComm;	
+   			document.querySelector("#scoreBoard").innerHTML = scoreCard;
+   			document.querySelector("#myUserPanel").innerHTML = "<H2>Your Guesses So Far... </H2>";
+   			// add event handler
+			document.onkeyup = function(event)
+			{
+
+			userGuess = event.key;
+			console.log("userGuess = "+userGuess);
+    		if(userGuess==computerGuess)
+        	{ 
+        		wins++;
+        		gameOver	= 1;
+        		guesses = 9;
+        		while(userChoices.length){userChoices.pop()};
+        		dynComm 	= "<p><H1>	Yeah! You are psychic!!!</h1></p><p><h2>It is : "+userGuess+"</p><p>Now guess again what I am thinking</h2></p>";
+        	}
+        	else if(userGuess!=computerGuess)
+        	{
+        	 	guesses--;         	
+				userChoices.push(userGuess);
+				//userChoices.push("userGuess");
+   				dynComm="<p>You Have " + guesses +" chances left to impress me!";
+         		if (guesses==1)
+         			{
+         				dynComm="<p><h2>LAST CHANCE TO IMPRESS ME!</h2>";
+         			}
+         		else if(guesses==0)
+         		{
+         			losses++;
+         			gameOver=1;
+         			guesses=9;
+         			userChoices = [];
+         			dynComm="<P><h2>Too Bad!!! Don't quit your day job!!!<br>Try Again!!!</h2></p>";
+         		}
+        	} // end else if incorrect guess...
+	   		scoreCard 	= '<H2> <p align="center"> SCORE BOARD </p>'+
+   					      "<p> Wins		: "+wins+"</p>"+
+						  "<p> Losses		: "+losses+"</p>"+
+						  "<p> Guesses Left: "+guesses+"</p></H2>";
+   			document.querySelector("#communicationBoard").innerHTML = staticComm+dynComm;	
+   			document.querySelector("#scoreBoard").innerHTML = scoreCard;	
+   			document.querySelector("#myUserPanel").innerHTML =
+ 						"<H2>Your Guesses So Far... </H2><H3><strong>" + userChoices.toString()+"</strong></h3>";
+		 } // end of onkeyup f()
+//		} // end while
+   			document.querySelector("#communicationBoard").innerHTML = staticComm+dynComm;	
+   			document.querySelector("#scoreBoard").innerHTML = scoreCard;	
+	} // end function startGame()
+  </script>
+
+</body>
+</html>
